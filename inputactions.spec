@@ -95,5 +95,7 @@ env DESTDIR=%{buildroot} cmake --install build --prefix /usr
 /usr/lib64/qt6/plugins/kwin/effects/plugins/kwin_gestures.so
 
 %changelog
+* Sun Jan 18 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.2
+- Merge ctl subpackage to mainpackage
 * Sun Jan 18 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.1
 - Initial multi-subpackage spec
