@@ -4,7 +4,7 @@
 %global commit_libinput_cpp 012bd22757bfe67239d46bd91da7378bf465d03c
 
 Name:           inputactions
-Version:        0.0.2
+Version:        0.0.3
 Release:        1%{?dist}.git%{commit_short}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
@@ -14,6 +14,7 @@ Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#
 Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/InputActions-libevdev-cpp-%{version}.tar.gz
 Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/InputActions-libinput-cpp-%{version}.tar.gz
 
+BuildRequires:  systemd-rpm-macros
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
@@ -41,8 +42,8 @@ This package is the Command line interface for InputActions.
 
 %package standalone
 Summary: Standalone application
-%description standalone
 Requires: inputactions = %{version}-%{release}
+%description standalone
 Standalone GUI application for InputActions.
 
 %package kwin
@@ -59,12 +60,9 @@ KWin effects plugin and configuration module.
 # Unpack the main source (Source0) into the build directory
 %autosetup -n InputActions-%{commit}
 
-mkdir -p lib
-rm -rf lib/libevdev-cpp lib/libinput-cpp
-tar zxvf %{SOURCE1} -C lib/
-tar zxvf %{SOURCE2} -C lib/
-mv lib/libevdev-cpp-%{commit_libevdev_cpp} lib/libevdev-cpp
-mv lib/libinput-cpp-%{commit_libinput_cpp} lib/libinput-cpp
+mkdir -p lib/libevdev-cpp lib/libinput-cpp
+tar -C lib/libevdev-cpp --strip 1 -zxvf %{SOURCE1}
+tar -C lib/libinput-cpp --strip 1 -zxvf %{SOURCE2}
 
 %build
 cmake -B build \
@@ -74,27 +72,38 @@ cmake -B build \
 cmake --build build -j$(nproc)
 
 %install
-mkdir -p %{buildroot}/usr
-env DESTDIR=%{buildroot} cmake --install build --prefix /usr
+mkdir -p %{buildroot}%{_prefix}
+env DESTDIR=%{buildroot} cmake --install build --prefix %{_prefix}
 
 %files
-/usr/bin/inputactions
+%{_bindir}/inputactions
 %doc README.md
 %license LICENSE
 
 %files standalone
-/usr/share/inputactions/gnome/inputactions@inputactions.org/extension.js
-/usr/share/inputactions/gnome/inputactions@inputactions.org/metadata.json
-/usr/share/inputactions/plasma/script.js
-/usr/bin/inputactions-client
-/usr/bin/inputactionsd
-/usr/lib/systemd/system/inputactionsd.service
+%{_datadir}/inputactions/gnome/inputactions@inputactions.org/extension.js
+%{_datadir}/inputactions/gnome/inputactions@inputactions.org/metadata.json
+%{_datadir}/inputactions/plasma/script.js
+%{_bindir}/inputactions-client
+%{_bindir}/inputactionsd
+%{_unitdir}/inputactionsd.service
 
 %files kwin
-/usr/lib64/qt6/plugins/kwin/effects/configs/inputactions_kwin_kcm.so
-/usr/lib64/qt6/plugins/kwin/effects/plugins/kwin_gestures.so
+%{_libdir}/qt6/plugins/kwin/effects/configs/inputactions_kwin_kcm.so
+%{_libdir}/qt6/plugins/kwin/effects/plugins/kwin_gestures.so
+
+%post standalone
+%systemd_post inputactions.service
+
+%preun standalone
+%systemd_preun inputactions.service
+
+%postun standalone
+%systemd_postun_with_restart inputactions.service
 
 %changelog
+* Mon Jan 19 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.3
+- Optimized packaging
 * Sun Jan 18 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.2
 - Merge ctl subpackage to mainpackage
 * Sun Jan 18 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.1
