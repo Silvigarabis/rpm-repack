@@ -4,11 +4,11 @@
 %global commit_libinput_cpp 012bd22757bfe67239d46bd91da7378bf465d03c
 
 Name:           inputactions
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}.git%{commit_short}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
-License:        GPL-3.0
+License:        GPL-3.0-or-later
 URL:            https://github.com/taj-ny/InputActions
 Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/InputActions-%{version}.tar.gz
 Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/InputActions-libevdev-cpp-%{version}.tar.gz
@@ -35,16 +35,9 @@ BuildRequires:  libdrm-devel
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  systemd
 
-Recommends: %{name}-kwin, %{name}-standalone, %{name}-cli
-
 %description
 Linux utility for binding keyboard/mouse/touchpad actions to system actions.
-
-%package ctl
-Summary: CLI tool
-%description ctl
-Requires: inputactions = %{version}-%{release}
-Command line interface for InputActions.
+This package is the Command line interface for InputActions.
 
 %package standalone
 Summary: Standalone application
@@ -85,11 +78,9 @@ mkdir -p %{buildroot}/usr
 env DESTDIR=%{buildroot} cmake --install build --prefix /usr
 
 %files
+/usr/bin/inputactions
 %doc README.md
 %license LICENSE
-
-%files ctl
-/usr/bin/inputactions
 
 %files standalone
 /usr/share/inputactions/gnome/inputactions@inputactions.org/extension.js
