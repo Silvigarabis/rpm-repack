@@ -30,6 +30,9 @@ BuildRequires:  libinput-devel
 BuildRequires:  libudev-devel
 BuildRequires:  cli11-devel
 BuildRequires:  qt6-qtbase
+BuildRequires:  libepoxy-devel
+BuildRequires:  libdrm-devel
+BuildRequires:  libxkbcommon-devel
 
 Recommends: %{name}-kwin, %{name}-standalone, %{name}-cli
 
