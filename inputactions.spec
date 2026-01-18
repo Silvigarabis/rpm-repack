@@ -8,7 +8,7 @@ Version:        0.0.1
 Release:        1%{?dist}.git%{commit_short}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
-License:        GPL-3.0-or-later
+License:        GPL-3.0
 URL:            https://github.com/taj-ny/InputActions
 Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/InputActions-%{version}.tar.gz
 Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/InputActions-libevdev-cpp-%{version}.tar.gz
@@ -33,7 +33,7 @@ BuildRequires:  qt6-qtbase
 BuildRequires:  libepoxy-devel
 BuildRequires:  libdrm-devel
 BuildRequires:  libxkbcommon-devel
-BuildRequires:  systemd-devel
+BuildRequires:  systemd
 
 Recommends: %{name}-kwin, %{name}-standalone, %{name}-cli
 
