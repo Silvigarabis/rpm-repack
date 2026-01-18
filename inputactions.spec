@@ -33,6 +33,7 @@ BuildRequires:  qt6-qtbase
 BuildRequires:  libepoxy-devel
 BuildRequires:  libdrm-devel
 BuildRequires:  libxkbcommon-devel
+BuildRequires:  systemd-devel
 
 Recommends: %{name}-kwin, %{name}-standalone, %{name}-cli
 
