@@ -5,7 +5,7 @@
 
 Name:           inputactions
 Version:        0.0.3
-Release:        3%{?dist}.git%{commit_short}
+Release:        4%{?dist}.git%{commit_short}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
 License:        GPL-3.0-or-later
@@ -92,13 +92,13 @@ tar -C lib/libinput-cpp --strip 1 -zxvf %{SOURCE2}
 %{_libdir}/qt6/plugins/kwin/effects/plugins/kwin_gestures.so
 
 %post standalone
-%systemd_post inputactions.service
+%systemd_post inputactionsd.service
 
 %preun standalone
-%systemd_preun inputactions.service
+%systemd_preun inputactionsd.service
 
 %postun standalone
-%systemd_postun_with_restart inputactions.service
+%systemd_postun_with_restart inputactionsd.service
 
 %changelog
 * Mon Jan 19 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.3
