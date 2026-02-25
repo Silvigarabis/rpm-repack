@@ -5,14 +5,14 @@
 
 Name:           inputactions
 Version:        0.0.3
-Release:        1%{?dist}.git%{commit_short}
+Release:        3%{?dist}.git%{commit_short}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/taj-ny/InputActions
-Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/InputActions-%{version}.tar.gz
-Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/InputActions-libevdev-cpp-%{version}.tar.gz
-Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/InputActions-libinput-cpp-%{version}.tar.gz
+Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/InputActions-%{commit}.tar.gz
+Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/InputActions-libevdev-cpp-%{commit_libevdev_cpp}.tar.gz
+Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/InputActions-libinput-cpp-%{commit_libinput_cpp}.tar.gz
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  cmake
@@ -65,15 +65,14 @@ tar -C lib/libevdev-cpp --strip 1 -zxvf %{SOURCE1}
 tar -C lib/libinput-cpp --strip 1 -zxvf %{SOURCE2}
 
 %build
-cmake -B build \
+%cmake\
     -DINPUTACTIONS_BUILD_CTL=ON \
     -DINPUTACTIONS_BUILD_STANDALONE=ON \
     -DINPUTACTIONS_BUILD_KWIN=ON
-cmake --build build -j$(nproc)
+%cmake_build
 
 %install
-mkdir -p %{buildroot}%{_prefix}
-env DESTDIR=%{buildroot} cmake --install build --prefix %{_prefix}
+%cmake_install
 
 %files
 %{_bindir}/inputactions
