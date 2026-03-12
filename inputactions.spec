@@ -4,8 +4,8 @@
 %global commit_libinput_cpp 012bd22757bfe67239d46bd91da7378bf465d03c
 
 Name:           inputactions
-Version:        0.0.3
-Release:        4%{?dist}.git%{commit_short}
+Version:        0.0.4
+Release:        0%{?dist}.git%{commit_short}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
 License:        GPL-3.0-or-later
