@@ -1,18 +1,24 @@
 %global commit 7ffc5b6c930031b9bded124a12651ffb452aa7ce
-%global commit_short %(echo %{commit} | cut -c1-7)
+%global git_tag v0.8.1
+%global git_abbr_commit 169-g7ffc5b6
+
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global abbr_release %(c=%{git_abbr_commit}; echo ${c//-/.})
+
 %global commit_libevdev_cpp 43ed222120ca33bc2f87a9f5e99dbf5cdef7986f
 %global commit_libinput_cpp 012bd22757bfe67239d46bd91da7378bf465d03c
 
 Name:           inputactions
-Version:        0.0.4
-Release:        1%{?dist}.git%{commit_short}
+Version:        %(c=%{git_tag}; echo "${c#?}")
+Release:        2.%{abbr_release}%{?dist}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
-License:        GPL-3.0-or-later
+License:        GPL-3.0-or-only
 URL:            https://github.com/taj-ny/InputActions
-Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/InputActions-%{commit}.tar.gz
-Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/InputActions-libevdev-cpp-%{commit_libevdev_cpp}.tar.gz
-Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/InputActions-libinput-cpp-%{commit_libinput_cpp}.tar.gz
+
+Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/%{NAME}-%{VERSION}-%{RELEASE}.tar.gz
+Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/%{NAME}-libevdev-cpp-%{commit_libevdev_cpp}.tar.gz
+Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/%{NAME}-libinput-cpp-%{commit_libinput_cpp}.tar.gz
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  cmake
@@ -58,7 +64,7 @@ KWin effects plugin and configuration module.
 
 %prep
 # Unpack the main source (Source0) into the build directory
-%autosetup -n InputActions-%{commit}
+%autosetup -n InputActions-%{commit} -T -b 0
 
 mkdir -p lib/libevdev-cpp lib/libinput-cpp
 tar -C lib/libevdev-cpp --strip 1 -zxvf %{SOURCE1}
@@ -101,9 +107,12 @@ tar -C lib/libinput-cpp --strip 1 -zxvf %{SOURCE2}
 %systemd_postun_with_restart inputactionsd.service
 
 %changelog
+* Sat Jun 6 2026 Silvigarabis <silvigarabis@outlook.com> - 0.8.1-2.169.g7ffc5b6
+- Use git describe tag as version and release string
 * Mon Jan 19 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.3
 - Optimized packaging
 * Sun Jan 18 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.2
 - Merge ctl subpackage to mainpackage
 * Sun Jan 18 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.1
 - Initial multi-subpackage spec
+
