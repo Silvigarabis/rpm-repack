@@ -1,0 +1,13 @@
+--- src/backend_scene/third_party/CMakeLists.txt	2026-06-06 18:33:42.216958191 +0800
++++ src/backend_scene/third_party/CMakeLists.txt.new	2026-06-06 18:33:36.565750752 +0800
+@@ -20,4 +20,10 @@
+ set(ENABLE_GLSLANG_JS OFF)
+ set(ENABLE_HLSL OFF)
+ set(ENABLE_OPT OFF)
++
++# Force glslang to build as static library even when
++# BUILD_SHARED_LIBS is enabled by the parent project.
++set(_old_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
++set(BUILD_SHARED_LIBS OFF)
+ add_subdirectory(glslang EXCLUDE_FROM_ALL)
++set(BUILD_SHARED_LIBS ${_old_BUILD_SHARED_LIBS})

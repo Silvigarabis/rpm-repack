@@ -7,7 +7,7 @@
 
 Name:           wallpaper-engine-kde-plugin-qt6
 Version:        %(c=%{git_tag}; echo "${c#?}")
-Release:        2.%{abbr_release}%{?dist}
+Release:        3.%{abbr_release}%{?dist}
 Summary:        A kde wallpaper plugin integrating wallpaper engine
 Group:          Development/System 
 License:        GPLv2
@@ -46,6 +46,8 @@ Source6:  https://github.com/mackron/miniaudio/archive/refs/tags/0.11.24.tar.gz#
 # -> /src/backend_scene/third_party/Eigen
 Source7:  https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.bz2#/eigen-3.4.1.tar.bz2
 
+Patch0: 01-force-glslang-static.patch
+
 BuildRequires: mpv-libs-devel
 BuildRequires: vulkan-headers
 BuildRequires: plasma-workspace-devel
@@ -53,27 +55,20 @@ BuildRequires: kf6-plasma-devel
 BuildRequires: lz4-devel
 BuildRequires: qt6-qtbase-private-devel
 BuildRequires: qt5-qtx11extras-devel
+BuildRequires: extra-cmake-modules
+BuildRequires: kf6-kcoreaddons-devel
 
 Requires: plasma-workspace
 Requires: gstreamer1-libav
 Requires: mpv-libs
 Requires: lz4
 Requires: python3-websockets
-Requires: qt6-qtwebchannel-devel
-Requires: qt6-qtwebsockets-devel
 
 %description
-
-%package -n libglslang
-Summary: libglslang
-Version: 11.8.0
-
-%description -n libglslang
 
 %prep
 %setup -n wallpaper-engine-kde-plugin-%{commit} -T -b 0
 
-mkdir -p glslang-11.8.0
 mkdir -p src/backend_scene
 mkdir -p src/backend_scene/third_party/SPIRV-Reflect
 mkdir -p src/backend_scene/third_party/SPIRV-Reflect/third_party/googletest
@@ -83,7 +78,6 @@ mkdir -p src/backend_scene/third_party/Eigen
 mkdir -p src/backend_scene/third_party/glslang
 
 tar --strip 1 -C . -xf %{SOURCE0}
-tar --strip 1 -C glslang-11.8.0 -xf %{SOURCE1}
 tar --strip 1 -C src/backend_scene -xf %{SOURCE2}
 tar --strip 1 -C src/backend_scene/third_party/SPIRV-Reflect -xf %{SOURCE3}
 tar --strip 1 -C src/backend_scene/third_party/SPIRV-Reflect/third_party/googletest -xf %{SOURCE4}
@@ -91,6 +85,8 @@ tar --strip 1 -C src/backend_scene/third_party/nlohmann -xf %{SOURCE5}
 tar --strip 1 -C src/backend_scene/third_party/miniaudio -xf %{SOURCE6}
 tar --strip 1 -C src/backend_scene/third_party/glslang -xf %{SOURCE1}
 tar --strip 1 -C src/backend_scene/third_party/Eigen -xf %{SOURCE7}
+
+%patch -P 0
 
 %build
 %cmake -DUSE_PLASMAPKG=ON
@@ -100,24 +96,16 @@ tar --strip 1 -C src/backend_scene/third_party/Eigen -xf %{SOURCE7}
 %cmake_install
 mkdir -p %{buildroot}%{_datadir}/plasma/wallpapers
 cp -r plugin %{buildroot}%{_datadir}/plasma/wallpapers/com.github.catsout.wallpaperEngineKde
-install -m 0755 %{_vpath_builddir}/src/backend_scene/third_party/glslang/SPIRV/libSPIRV.so %{buildroot}%{_libdir}
-install -m 0755 %{_vpath_builddir}/src/backend_scene/third_party/glslang/glslang/libglslang.so.11.8.0 %{buildroot}%{_libdir}
-ln -s libglslang.so.11.8.0 %{buildroot}%{_libdir}/libglslang.so.11.8
-ln -s libglslang.so.11.8 %{buildroot}%{_libdir}/libglslang.so.11
 
 %files
 %attr(0755,root,root) %{_libdir}/qt6/qml/com/github/catsout/wallpaperEngineKde/libWallpaperEngineKde.so
 %attr(0644,root,root) %{_libdir}/qt6/qml/com/github/catsout/wallpaperEngineKde/qmldir
 %{_datadir}/plasma/wallpapers/com.github.catsout.wallpaperEngineKde/*
 
-%files -n libglslang
-%{_libdir}/libglslang.so.11.8.0
-%{_libdir}/libglslang.so.11.8
-%{_libdir}/libglslang.so.11
-%{_libdir}/libSPIRV.so
-
 %changelog 
-* Sat Jun 6 2026 Silvigarabis <silvigarabis@outlook.com> - 0.5.4.2.118.gf1b86e1
+* Sat Jun 6 2026 Silvigarabis <silvigarabis@outlook.com> - 0.5.4-3.118.gf1b86e1
+- Fix libglslang link
+* Sat Jun 6 2026 Silvigarabis <silvigarabis@outlook.com> - 0.5.4-2.118.gf1b86e1
 - Use git describe tag as version and release string
 * Mon Jan 19 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.1
 - Initial spec
