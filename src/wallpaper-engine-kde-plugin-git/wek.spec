@@ -1,17 +1,21 @@
 %global commit f1b86e1ca7982b5b9f47d21ac2cb5c2adfb45902
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global git_tag v0.5.4
+%global git_abbr_commit 118-gf1b86e1
 
-Name: wallpaper-engine-kde-plugin-qt6
-Version: 0.0.1
-Release: 1%{?dist}.git%{shortcommit}
-Summary: A kde wallpaper plugin integrating wallpaper engine
-Group: Development/System 
-License: GPLv2
-URL: https://github.com/catsout/wallpaper-engine-kde-plugin
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global abbr_release %(c=%{git_abbr_commit}; echo ${c//-/.})
+
+Name:           wallpaper-engine-kde-plugin-qt6
+Version:        %(c=%{git_tag}; echo "${c#?}")
+Release:        2.%{abbr_release}%{?dist}
+Summary:        A kde wallpaper plugin integrating wallpaper engine
+Group:          Development/System 
+License:        GPLv2
+URL:            https://github.com/catsout/wallpaper-engine-kde-plugin
 
 # wallpaper-engine-kde-plugin-{commit}
 # -> /
-Source0: https://github.com/eemmmmg/wallpaper-engine-kde-plugin/archive/%{commit}.tar.gz#/wallpaper-engine-kde-plugin-%{commit}.tar.gz
+Source0: https://github.com/catsout/wallpaper-engine-kde-plugin/archive/%{commit}.tar.gz#/%{NAME}-%{VERSION}-%{git_abbr_commit}.tar.gz
 
 # glslang-11.8.0
 # -> /glslang-11.8.0
@@ -67,7 +71,7 @@ Version: 11.8.0
 %description -n libglslang
 
 %prep
-%setup -n wallpaper-engine-kde-plugin-%{commit}
+%setup -n wallpaper-engine-kde-plugin-%{commit} -T -b 0
 
 mkdir -p glslang-11.8.0
 mkdir -p src/backend_scene
@@ -113,5 +117,7 @@ ln -s libglslang.so.11.8 %{buildroot}%{_libdir}/libglslang.so.11
 %{_libdir}/libSPIRV.so
 
 %changelog 
+* Sat Jun 6 2026 Silvigarabis <silvigarabis@outlook.com> - 0.5.4.2.118.gf1b86e1
+- Use git describe tag as version and release string
 * Mon Jan 19 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.1
 - Initial spec

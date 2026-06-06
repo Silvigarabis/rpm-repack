@@ -12,7 +12,7 @@ Summary:        Best-Effort Extent-Same btrfs deduplication daemon
 
 License:        GPL-3.0-only
 URL:            https://github.com/Zygo/bees
-Source0:        https://github.com/Zygo/bees/archive/%{commit}.tar.gz#/%{name}-%{git_tag}-%{git_abbr_commit}.tar.gz
+Source0:        https://github.com/Zygo/bees/archive/%{commit}.tar.gz#/%{name}-%{VERSION}-%{git_abbr_commit}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -53,6 +53,7 @@ export CFLAGS="$CFLAGS -Wno-error=restrict -Wno-error=maybe-uninitialized"
 %doc README.md
 
 %changelog
+* Sat Jun 06 2026 Silvigarabis <Silvigarabis@outlook.com> - 0.11-1.50.g2d53565
+- Update package version string format
 * Sat Jun 06 2026 Silvigarabis <Silvigarabis@outlook.com> - 0.11-0.50.g2d53565.git2d53565
 - Initial package
-

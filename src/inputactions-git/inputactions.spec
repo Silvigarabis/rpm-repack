@@ -13,10 +13,10 @@ Version:        %(c=%{git_tag}; echo "${c#?}")
 Release:        2.%{abbr_release}%{?dist}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
-License:        GPL-3.0-or-only
+License:        GPL-3.0-only
 URL:            https://github.com/taj-ny/InputActions
 
-Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/%{NAME}-%{VERSION}-%{RELEASE}.tar.gz
+Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/%{NAME}-%{VERSION}-%{git_abbr_commit}.tar.gz
 Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/%{NAME}-libevdev-cpp-%{commit_libevdev_cpp}.tar.gz
 Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/%{NAME}-libinput-cpp-%{commit_libinput_cpp}.tar.gz
 
