@@ -7,7 +7,7 @@
 
 Name:           bees-git
 Version:        %{git_tag}
-Release:        0.%{abbr_release}.git%{shortcommit}%{?dist}
+Release:        1.%{abbr_release}%{?dist}
 Summary:        Best-Effort Extent-Same btrfs deduplication daemon
 
 License:        GPL-3.0-only
