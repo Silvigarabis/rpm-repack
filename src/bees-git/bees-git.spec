@@ -18,6 +18,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  discount
 BuildRequires:  systemd-rpm-macros
+BuildRequires:  libatomic
 
 Requires:       util-linux
 Requires:       bash
@@ -31,18 +32,22 @@ BEES (Best-Effort Extent-Same) is a background deduplication daemon
 for btrfs filesystems.
 
 %prep
-%setup -n bees-%{commit} -T -a 0
+%setup -n bees-%{commit} -T -b 0
 
 %build
-%make_build all scripts BEES_VERSION=%{version}
+export CXXFLAGS="$CXXFLAGS -Wno-error=restrict -Wno-error=maybe-uninitialized"
+export CFLAGS="$CFLAGS -Wno-error=restrict -Wno-error=maybe-uninitialized"
+
+%make_build all scripts BEES_VERSION=%{git_tag}-%{git_abbr_commit} SYSTEMD_SYSTEM_UNIT_DIR=%{_unitdir} LIBEXEC_PREFIX=%{_libexecdir} BINDIR=bin
 
 %install
-%make_install BEES_VERSION=%{version}
+
+%make_install BEES_VERSION=%{git_tag}-%{git_abbr_commit} SYSTEMD_SYSTEM_UNIT_DIR=%{_unitdir} LIBEXEC_PREFIX=%{_libexecdir} BINDIR=bin
 
 %files
-%{_etcdir}/bees/beesd.conf.sample
-%{_libexecdir}/bees/bees
+%{_sysconfdir}/bees/beesd.conf.sample
 %{_bindir}/beesd
+%{_libexecdir}/bees
 %{_unitdir}/beesd@.service
 
 %license COPYING
