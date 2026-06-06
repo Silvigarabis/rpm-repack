@@ -21,7 +21,6 @@ BuildRequires:  systemd-rpm-macros
 BuildRequires:  libatomic
 
 Requires:       util-linux
-Requires:       bash
 Requires:       btrfs-progs
 
 Provides:       bees
