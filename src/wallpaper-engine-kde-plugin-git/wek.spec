@@ -63,6 +63,9 @@ Requires: gstreamer1-libav
 Requires: mpv-libs
 Requires: lz4
 Requires: python3-websockets
+# Requires by 'plugin/contents/ui/Pyext.qml', intend to use '-devel' package
+Requires: qt6-qtwebsockets-devel
+Requires: qt6-qtwebchannel-devel
 
 %description
 
