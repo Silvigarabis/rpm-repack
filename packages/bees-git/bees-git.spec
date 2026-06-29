@@ -12,7 +12,7 @@ Summary:        Best-Effort Extent-Same btrfs deduplication daemon
 
 License:        GPL-3.0-only
 URL:            https://github.com/Zygo/bees
-Source0:        https://github.com/Zygo/bees/archive/%{commit}.tar.gz#/%{name}-%{VERSION}-%{git_abbr_commit}.tar.gz
+Source0:        git-src.tar.zst
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -31,7 +31,7 @@ BEES (Best-Effort Extent-Same) is a background deduplication daemon
 for btrfs filesystems.
 
 %prep
-%setup -n bees-%{commit} -T -b 0
+%setup -n git-src -T -b 0
 
 %build
 export CXXFLAGS="$CXXFLAGS -Wno-error=restrict -Wno-error=maybe-uninitialized"
