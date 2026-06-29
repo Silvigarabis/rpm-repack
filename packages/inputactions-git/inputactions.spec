@@ -5,9 +5,6 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global abbr_release %(c=%{git_abbr_commit}; echo ${c//-/.})
 
-%global commit_libevdev_cpp 43ed222120ca33bc2f87a9f5e99dbf5cdef7986f
-%global commit_libinput_cpp 012bd22757bfe67239d46bd91da7378bf465d03c
-
 Name:           inputactions
 Version:        %(c=%{git_tag}; echo "${c#?}")
 Release:        2.%{abbr_release}%{?dist}
@@ -16,9 +13,7 @@ Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 License:        GPL-3.0-only
 URL:            https://github.com/taj-ny/InputActions
 
-Source0:        https://github.com/taj-ny/InputActions/archive/%{commit}.tar.gz#/%{NAME}-%{VERSION}-%{git_abbr_commit}.tar.gz
-Source1:        https://github.com/InputActions/libevdev-cpp/archive/%{commit_libevdev_cpp}.tar.gz#/%{NAME}-libevdev-cpp-%{commit_libevdev_cpp}.tar.gz
-Source2:        https://github.com/InputActions/libinput-cpp/archive/%{commit_libinput_cpp}.tar.gz#/%{NAME}-libinput-cpp-%{commit_libinput_cpp}.tar.gz
+Source0:        git-src.tar.zst
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  cmake
@@ -64,11 +59,7 @@ KWin effects plugin and configuration module.
 
 %prep
 # Unpack the main source (Source0) into the build directory
-%autosetup -n InputActions-%{commit} -T -b 0
-
-mkdir -p lib/libevdev-cpp lib/libinput-cpp
-tar -C lib/libevdev-cpp --strip 1 -zxvf %{SOURCE1}
-tar -C lib/libinput-cpp --strip 1 -zxvf %{SOURCE2}
+%autosetup -n git-src -T -b 0
 
 %build
 %cmake\

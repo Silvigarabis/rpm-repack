@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+set -x
+
+pushd "$PROJECT_ROOT"
+
+tar --exclude .git --zstd -cf "$GENERATE_DEST_FILE" "git-src"
+
+popd
+

@@ -1,9 +1,9 @@
-[submodule "src/bees-git/repo"]
+[submodule "src/bees-git/git-src"]
 	path = src/bees-git/repo
 	url = https://github.com/Zygo/bees.git
-[submodule "src/inputactions-git/repo"]
-	path = src/inputactions-git/repo
+[submodule "src/inputactions-git/git-src"]
+	path = src/inputactions-git/git-src
 	url = https://github.com/taj-ny/InputActions.git
-[submodule "src/wallpaper-engine-kde-plugin-git/repo"]
-	path = src/wallpaper-engine-kde-plugin-git/repo
+[submodule "src/wallpaper-engine-kde-plugin-git/git-src"]
+	path = src/wallpaper-engine-kde-plugin-git/git-src
 	url = https://github.com/catsout/wallpaper-engine-kde-plugin.git
