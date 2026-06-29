@@ -253,6 +253,21 @@ inspect_rpmspec_source_name_list(){
     printf '%s\n' "${SPEC_FILE_SOURCE_NAME_LIST[@]}"
 }
 
+generate_srpm_and_mockbuild(){
+    generate_srpm
+    if [[ -z ${GENERATED_SRPM_PATH:-} || ! -f ${GENERATED_SRPM_PATH:-} ]]; then
+        log_err "cannot find srpm ${GENERATED_SRPM_NAME:-} at ${GENERATED_SRPM_PATH:-}" 
+        return 1
+    fi
+
+    local comm=(mock rebuild "${GENERATED_SRPM_PATH}" "$@")
+
+    log "[EXEC] ${comm[*]}"
+    "${comm[@]}"
+
+    log "[BUILD] mock done."
+}
+
 generate_srpm_and_build(){
     log "building $SPEC_FILE"
 
@@ -263,9 +278,15 @@ generate_srpm_and_build(){
         return 1
     fi
 
-    rpm_wrapper rpmbuild --rebuild "${GENERATED_SRPM_PATH}"
+    local comm=(rpm_wrapper rpmbuild --rebuild "${GENERATED_SRPM_PATH}")
 
-    log "[BUILDING] done. result rpms may found under $PATH_RPMBUILD_RPMDIR"
+    log "[RUN] ${comm[*]}"
+    (
+        set -x
+        "${comm[@]}"
+    )
+
+    log "[BUILD] done. result rpms may found under $PATH_RPMBUILD_RPMDIR"
 }
 
 generate_srpm(){
