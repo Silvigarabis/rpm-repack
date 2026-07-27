@@ -7,3 +7,6 @@
 [submodule "src/wallpaper-engine-kde-plugin-git/git-src"]
 	path = src/wallpaper-engine-kde-plugin-git/git-src
 	url = https://github.com/catsout/wallpaper-engine-kde-plugin.git
+[submodule "packages/glfw-git/git-src"]
+	path = packages/glfw-git/git-src
+	url = https://github.com/glfw/glfw.git
