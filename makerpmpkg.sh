@@ -293,7 +293,7 @@ generate_srpm(){
     log "generating srpm"
 
     local srpm_name srpm_path
-    srpm_name=$(rpm_wrapper rpmspec -q --qf '%{NAME}-%{VERSION}-%{RELEASE}.src.rpm' "$PATH_SPEC_FILE")
+    srpm_name=$(rpm_wrapper rpmspec --srpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}.src.rpm' "$PATH_SPEC_FILE")
     srpm_path="$PATH_RPMBUILD_SRCRPMDIR/${srpm_name}"
 
     if [[ ${SCRIPT_OPTS[srpm-use-cache]} = y && -f ${srpm_path} ]]; then
@@ -322,7 +322,7 @@ generate_sources_dir(){
         dest_file="${source_file_dest_dir}/${source_name}"
 
         if [[ -e "${dest_file}" ]]; then
-            if [[ $SCRIPT_OPTS[override-dest-sources] = y ]]; then
+            if [[ ${SCRIPT_OPTS[override-dest-sources]} = y ]]; then
                 rm -f "${dest_file}"
             else
                 log "[SKIP EXISTS] ${source_name}"
