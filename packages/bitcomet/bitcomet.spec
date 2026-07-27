@@ -10,7 +10,7 @@ URL:            https://www.bitcomet.com/
 BuildArch:      x86_64
 
 # 依赖（从 Depends 转换）
-BuildRequires:  dpkg
+BuildRequires:  dpkg patchelf
 
 # 可选
 Packager:       Silvigarabis
@@ -43,8 +43,13 @@ dpkg-deb -e %{SOURCE0} control
 # ===== 安装阶段 =====
 %install
 
-cp -r unpack/data/usr/bin/ %{buildroot}/%{_bindir}
-cp -r unpack/data/usr/share/ %{buildroot}/%{_datadir}
+mkdir %{buildroot}%{_prefix}
+
+cp -r unpack/data/usr/bin/ %{buildroot}%{_bindir}
+cp -r unpack/data/usr/share/ %{buildroot}%{_datadir}
+
+patchelf --remove-rpath %{buildroot}%{_bindir}/BitComet
+patchelf --remove-rpath %{buildroot}%{_bindir}/bitcometd
 
 # ===== 安装后脚本（预留）=====
 %post
@@ -54,8 +59,8 @@ cp -r unpack/data/usr/share/ %{buildroot}/%{_datadir}
 
      echo ""
      echo "The installation of BitComet has been completed. Welcome to start using it!"
-     echo "To launch the graphical user interface (GUI) version of the program, type \"\033[32mBitComet\033[0m\"."
-     echo "To launch the console version of the program with Web UI, type \"\033[32mbitcometd\033[0m\"."
+     echo "To launch the graphical user interface (GUI) version of the program, type \"BitComet\"."
+     echo "To launch the console version of the program with Web UI, type \"bitcometd\"."
      echo ""
 
 # ===== 卸载前 =====
@@ -74,7 +79,7 @@ cp -r unpack/data/usr/share/ %{buildroot}/%{_datadir}
 
 %{_datadir}/applications/bitcomet.desktop 
 %{_datadir}/icons/hicolor/512x512/apps/bitcomet.png
-%{_datadir}/bitcomet
+%{_datadir}/bitcomet/*
 
 # ===== 变更日志 =====
 %changelog
