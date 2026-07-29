@@ -1,9 +1,10 @@
-%global commit ed6452b13c76f7b4da216a9952bc7837aeb0f031
+%global commit 364b214c6f3a962caa782104c08f905653012481
 %global git_tag 3.4
-%global git_abbr_commit 107-ged6452b1
+%global git_abbr_commit 112-g364b214c
 
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global abbr_release %(c=%{git_abbr_commit}; echo ${c//-/.})
+%global capture_date 20260729
 
 Name:           glfw
 Version:        %(c=%{git_tag}; echo "${c}")
@@ -61,6 +62,8 @@ developing applications that use %{name}.
 %{_libdir}/libglfw.so.3*
 
 %changelog
+* Wed Jul 29 Silvigarabis - 3.4-3.4-112-g364b214c
+- Update to latest master version
 * Sat Jul 4 2026 Silvigarabis <silvigarabis@outlook.com> - 3.4-107-ged6452b1
 - Initial packages
 
