@@ -62,7 +62,7 @@ developing applications that use %{name}.
 %{_libdir}/libglfw.so.3*
 
 %changelog
-* Wed Jul 29 Silvigarabis - 3.4-3.4-112-g364b214c
+* Wed Jul 29 2026 Silvigarabis - 3.4-3.4-112-g364b214c
 - Update to latest master version
 * Sat Jul 4 2026 Silvigarabis <silvigarabis@outlook.com> - 3.4-107-ged6452b1
 - Initial packages
