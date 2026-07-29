@@ -6,6 +6,9 @@
 %global abbr_release %(c=%{git_abbr_commit}; echo ${c//-/.})
 %global capture_date 20260729
 
+# 跟随上游设置
+Epoch:          1
+
 Name:           glfw
 Version:        %(c=%{git_tag}; echo "${c}")
 Release:        0.%{abbr_release}%{?dist}
@@ -29,7 +32,7 @@ creating windows, contexts and surfaces, reading input, handling events, etc.
 
 %package devel
 Summary: Development files for %{name}
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 The %{name}-devel package contains libraries and header files for
