@@ -11,7 +11,9 @@ Epoch:          1
 
 Name:           glfw
 Version:        %(c=%{git_tag}; echo "${c}")
-Release:        0.%{abbr_release}%{?dist}
+
+# Keep Release above Fedora's package so the git build remains preferred.
+Release:        100.%{abbr_release}%{?dist}
 Summary:        an Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development
 
 License:        GPL-3.0-only
