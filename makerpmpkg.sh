@@ -234,15 +234,22 @@ log_err(){
 
 get_SPEC_FILE_SOURCE_NAME_LIST(){
     local spec_file="$PATH_SPEC_FILE" source_name source_name_list
+
     mapfile -td$'\n' source_name_list < <(
-        rpmspec -P "$spec_file" | 
-            awk -F': ' \
-            '/^(Source|Patch)[0-9]*:/ {
-                sub(/^[ \t]+/, "", $2)
-                sub(/[ \t]+$/, "", $2)
-                print $2
+        {
+            if command -v spectool &>/dev/null; then
+                rpm_wrapper spectool --list-files --all "$spec_file"
+            else
+                rpm_wrapper rpmspec -P "$spec_file"
+            fi
+        } | awk -F': ' \
+                '/^(Source|Patch)[0-9]*:/ {
+                    sub(/^[ \t]+/, "", $2)
+                    sub(/[ \t]+$/, "", $2)
+                    print $2
             }'
         )
+
     for source_name in "${source_name_list[@]}"; do
         SPEC_FILE_SOURCE_NAME_LIST+=("$(basename -- "$source_name")")
     done
