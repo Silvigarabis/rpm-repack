@@ -1,1 +1,6 @@
+# Originally from InputActions project documentation:
+# https://wiki.inputactions.org/main/getting-started/installation/kwin.html#additional-setup-optional
+#
+# Included for RPM packaging of inputactions-udev-rules.
+
 ENV{ID_INPUT_TOUCHPAD}=="1", TAG+="uaccess"
