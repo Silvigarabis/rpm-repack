@@ -1,19 +1,23 @@
-%global commit 7ffc5b6c930031b9bded124a12651ffb452aa7ce
-%global git_tag v0.8.1
-%global git_abbr_commit 169-g7ffc5b6
+%global commit 537a1fca46487251acdff55136d44f51686cbca9
+%global git_tag v0.9.0
+%global git_abbr_commit 10-g537a1fc
 
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global abbr_release %(c=%{git_abbr_commit}; echo ${c//-/.})
 
 Name:           inputactions
 Version:        %(c=%{git_tag}; echo "${c#?}")
-Release:        2.%{abbr_release}%{?dist}
+Release:        3.%{abbr_release}%{?dist}
 Summary:        Linux utility for binding keyboard/mouse/touchpad actions
 
 License:        GPL-3.0-only
 URL:            https://github.com/taj-ny/InputActions
 
 Source0:        git-src.tar.zst
+Source1:        71-touchpad.rules
+
+Suggests:       %{name}-kwin
+Suggests:       %{name}-standalone
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  cmake
@@ -21,6 +25,7 @@ BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  kwin-devel
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  kf6-ki18n-devel
 BuildRequires:  kf6-kguiaddons-devel
 BuildRequires:  kf6-kcmutils-devel
@@ -42,62 +47,111 @@ Linux utility for binding keyboard/mouse/touchpad actions to system actions.
 This package is the Command line interface for InputActions.
 
 %package standalone
-Summary: Standalone application
-Requires: inputactions = %{version}-%{release}
+Summary: Standalone application varient of %{name}
+Requires: %{name} = %{version}-%{release}
 %description standalone
 Standalone GUI application for InputActions.
 
 %package kwin
-Summary: KWin plugin and KCM module
+Summary: KWin plugin and KCM module varient of %{name}
 Requires: kwin
 Requires: kf6-ki18n
 Requires: kf6-kguiaddons
 Requires: kf6-kcmutils
-Requires: inputactions = %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
+Recommends: %{name}-udev-rules
 %description kwin
 KWin effects plugin and configuration module.
+
+%package udev-rules
+Summary: Introduce udev rules for evdev usages.
+BuildArch:      noarch
+Requires:       systemd-udev
+Suggests:       %{name}-kwin = %{version}-%{release}
+
+%description udev-rules
+Linux utility for binding keyboard/mouse/touchpad actions to system actions.
+This package is the udev rules container about evdev usages of touchpad
 
 %prep
 # Unpack the main source (Source0) into the build directory
 %autosetup -n git-src -T -b 0
 
+cp %{SOURCE1} 71-touchpad.rules
+
 %build
-%cmake\
-    -DINPUTACTIONS_BUILD_CTL=ON \
-    -DINPUTACTIONS_BUILD_STANDALONE=ON \
-    -DINPUTACTIONS_BUILD_KWIN=ON
-%cmake_build
+pushd ctl
+%cmake
+%cmake_build 
+popd
+
+pushd standalone
+%cmake 
+%cmake_build 
+popd
+
+pushd kwin
+%cmake_kf6
+%cmake_build 
+popd
 
 %install
+
+pushd ctl
 %cmake_install
+popd
+
+pushd standalone
+%cmake_install
+popd
+
+pushd kwin
+%cmake_install
+popd
+
+install -D -m 0644 71-touchpad.rules %{buildroot}%{_sysconfdir}/udev/rules.d/71-%{name}-touchpad.rules 
 
 %files
-%{_bindir}/inputactions
+%{_bindir}/%{name}
 %doc README.md
 %license LICENSE
 
 %files standalone
-%{_datadir}/inputactions/gnome/inputactions@inputactions.org/extension.js
-%{_datadir}/inputactions/gnome/inputactions@inputactions.org/metadata.json
-%{_datadir}/inputactions/plasma/script.js
-%{_bindir}/inputactions-client
-%{_bindir}/inputactionsd
-%{_unitdir}/inputactionsd.service
+%{_datadir}/%{name}/gnome/%{name}@%{name}.org/extension.js
+%{_datadir}/%{name}/gnome/%{name}@%{name}.org/metadata.json
+%{_datadir}/%{name}/plasma/script.js
+%{_bindir}/%{name}-client
+%{_bindir}/%{name}d
+%{_unitdir}/%{name}d.service
 
 %files kwin
-%{_libdir}/qt6/plugins/kwin/effects/configs/inputactions_kwin_kcm.so
-%{_libdir}/qt6/plugins/kwin/effects/plugins/kwin_gestures.so
+%{_kf6_archdatadir}/plugins/kwin/effects/configs/%{name}_kwin_kcm.so
+%{_kf6_archdatadir}/plugins/kwin/effects/plugins/kwin_gestures.so
+
+%files udev-rules
+%{_sysconfdir}/udev/rules.d/71-touchpad.rules 
+
+
+%post udev-rules
+if [ -S /run/udev/control ]; then
+    udevadm control --reload
+    udevadm trigger
+fi
 
 %post standalone
-%systemd_post inputactionsd.service
+%systemd_post %{name}d.service
 
 %preun standalone
-%systemd_preun inputactionsd.service
+%systemd_preun %{name}d.service
 
 %postun standalone
-%systemd_postun_with_restart inputactionsd.service
+%systemd_postun_with_restart %{name}d.service
 
 %changelog
+* Wed Aug 12 2026 Silvigarabis <silvigarabis@outlook.com> - 0.9.0-3.10-g537a1fc
+- Add post script to reload udev rules
+* Wed Aug 12 2026 Silvigarabis <silvigarabis@outlook.com> - 0.9.0-2.10-g537a1fc
+- Update sources to latest git main branch
 * Sat Jun 6 2026 Silvigarabis <silvigarabis@outlook.com> - 0.8.1-2.169.g7ffc5b6
 - Use git describe tag as version and release string
 * Mon Jan 19 2026 Silvigarabis <silvigarabis@outlook.com> - 0.0.3
