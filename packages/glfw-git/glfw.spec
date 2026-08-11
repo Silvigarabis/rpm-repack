@@ -16,7 +16,7 @@ Version:        %(c=%{git_tag}; echo "${c}")
 Release:        100.%{abbr_release}%{?dist}
 Summary:        an Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development
 
-License:        GPL-3.0-only
+License:        Zlib
 URL:            https://www.glfw.org/
 
 Source0:        git-src.tar.zst
