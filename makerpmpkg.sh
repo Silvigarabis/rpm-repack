@@ -94,6 +94,7 @@ script_config_default(){
         ["inspect-source-list"]="inspect_rpmspec_source_name_list"
         ["generate-sources-dir"]="generate_sources_dir"
         ["srpm"]="generate_srpm"
+        ["srpm-outpath"]="generate_srpm_outpath"
         ["rpmbuild"]="generate_srpm_and_build"
         ["mockbuild"]="generate_srpm_and_mockbuild"
     )
@@ -294,6 +295,17 @@ generate_srpm_and_build(){
     )
 
     log "[BUILD] done. result rpms may found under $PATH_RPMBUILD_RPMDIR"
+}
+
+generate_srpm_outpath(){
+    generate_srpm
+    local outpath_fd="${SCRIPT_OPTS[srpm-outpath-fd]:-}"
+    if [[ -n ${outpath_fd} ]]; then
+        printf '%s\n' "$GENERATED_SRPM_PATH" >&${outpath_fd}
+    else
+        log_err "[SRPM OUTPATH] required srpm-outpath-fd opt not found"
+        return 2
+    fi
 }
 
 generate_srpm(){
