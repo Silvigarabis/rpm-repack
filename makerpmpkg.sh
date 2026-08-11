@@ -118,8 +118,8 @@ script_config_default(){
 
 script_update_opt(){
     local pair="$1"
-    local key="${pair%%=*}" val="${pair%*=}"
-    SCRIPT_OPTS[$key]="$val"
+    local key="${pair%%=*}" val="${pair#*=}"
+    SCRIPT_OPTS["$key"]="$val"
 }
 
 parse_arg(){
