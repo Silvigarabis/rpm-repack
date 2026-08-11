@@ -80,6 +80,7 @@ This package is the udev rules container about evdev usages of touchpad
 cp %{SOURCE1} 71-touchpad.rules
 
 %build
+
 pushd ctl
 %cmake
 %cmake_build 
@@ -129,7 +130,7 @@ install -D -m 0644 71-touchpad.rules %{buildroot}%{_sysconfdir}/udev/rules.d/71-
 %{_kf6_archdatadir}/plugins/kwin/effects/plugins/kwin_gestures.so
 
 %files udev-rules
-%{_sysconfdir}/udev/rules.d/71-touchpad.rules 
+%{_sysconfdir}/udev/rules.d/71-%{name}-touchpad.rules 
 
 
 %post udev-rules
