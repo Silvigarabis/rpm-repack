@@ -11,3 +11,6 @@
 	path = packages/glfw-git/git-src
 	url = https://github.com/glfw/glfw.git
 
+[submodule "packages/bindfs-custom/git-src"]
+	path = packages/bindfs-custom/git-src
+	url = https://github.com/Silvigarabis/bindfs-custom.git
