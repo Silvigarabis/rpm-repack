@@ -436,6 +436,7 @@ Usage: $0
     inspect-source-list
     generate-sources-dir
     srpm
+    srpm-outpath
     rpmbuild
 
 [OPTIONS]:
