@@ -16,4 +16,4 @@ if [[ -d git-src ]]; then
     git submodule init ./git-src
 fi
 
-bash ../makerpmpkg.sh -o srpm-outdir="$resultdir" srpm-outdir "$specname".spec
+bash ../../makerpmpkg.sh -o srpm-outdir="$resultdir" srpm-outdir "$specname".spec
