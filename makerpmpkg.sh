@@ -302,7 +302,6 @@ generate_srpm_asdir(){
     generate_srpm
     local outpath_dir="${SCRIPT_OPTS[srpm-outdir]:-}"
 
-
     if [[ -n ${outpath_dir} ]]; then
         mkdir -p "$outpath_dir"
         bsdtar xf "$GENERATED_SRPM_PATH" -C "$outpath_dir"
